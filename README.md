@@ -107,8 +107,8 @@ andromeda/
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/7irelo/andromeda-spring-jdbc-api.git
-   cd andromeda-spring-jdbc-api
+   git clone https://github.com/7irelo/andromeda-spring-api.git
+   cd andromeda-spring-api
    ```
 
 2. Set up PostgreSQL:
