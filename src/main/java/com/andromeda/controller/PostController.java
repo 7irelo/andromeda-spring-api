@@ -1,9 +1,8 @@
-package com.example.andromeda.controller;
+package com.andromeda.controller;
 
-import com.example.andromeda.model.Post;
-import com.example.andromeda.service.PostService;
+import com.andromeda.dto.PostDTO;
+import com.andromeda.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,20 +15,27 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<Post>> getUserPosts(@PathVariable Long userId) {
-        return new ResponseEntity<>(postService.getUserPosts(userId), HttpStatus.OK);
+    @PostMapping
+    public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO postDTO) {
+        PostDTO createdPost = postService.savePost(postDTO);
+        return ResponseEntity.ok(createdPost);
     }
 
-    @PostMapping
-    public ResponseEntity<Post> createPost(@RequestBody Post post) {
-        post.setCreatedAt(new Date());
-        return new ResponseEntity<>(postService.savePost(post), HttpStatus.CREATED);
+    @GetMapping
+    public ResponseEntity<List<PostDTO>> getAllPosts() {
+        List<PostDTO> posts = postService.getAllPosts();
+        return ResponseEntity.ok(posts);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PostDTO> getPostById(@PathVariable Long id) {
+        PostDTO post = postService.getPostById(id);
+        return ResponseEntity.ok(post);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePost(@PathVariable Long id) {
         postService.deletePost(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,7 +1,7 @@
-package com.example.andromeda.model;
+package com.andromeda.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -10,14 +10,21 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @Size(min = 2, max = 100)
-    private String name;
+    @Column(unique = true, nullable = false)
+    private String username;
 
-    @NotNull
-    @Email
-    @Column(unique = true)
+    @Column(unique = true, nullable = true)
     private String email;
 
-    // Getters and Setters
+    private String avatar;
+
+    private String bio;
+
+    @ManyToMany
+    @JoinTable(name = "friendship",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "friend_id"))
+    private Set<User> friends;
+
+    // getters and setters
 }

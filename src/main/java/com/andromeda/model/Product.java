@@ -1,11 +1,11 @@
-package com.andromeda.entity;
+package com.andromeda.model;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
 @Entity
-public class Post {
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,11 +15,15 @@ public class Post {
     @JoinColumn(name = "creator_id")
     private User creator;
 
-    private String content;
+    private String name;
+
+    private String description;
+
+    private double price;
 
     @ManyToMany
-    @JoinTable(name = "post_likes",
-            joinColumns = @JoinColumn(name = "post_id"),
+    @JoinTable(name = "product_likes",
+            joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> likes;
 

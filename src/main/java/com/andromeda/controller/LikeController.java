@@ -1,9 +1,8 @@
-package com.example.andromeda.controller;
+package com.andromeda.controller;
 
-import com.example.andromeda.model.Like;
-import com.example.andromeda.service.LikeService;
+import com.andromeda.dto.LikeDTO;
+import com.andromeda.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,19 +15,27 @@ public class LikeController {
     @Autowired
     private LikeService likeService;
 
-    @GetMapping("/{postId}")
-    public ResponseEntity<List<Like>> getPostLikes(@PathVariable Long postId) {
-        return new ResponseEntity<>(likeService.getPostLikes(postId), HttpStatus.OK);
+    @PostMapping
+    public ResponseEntity<LikeDTO> createLike(@RequestBody LikeDTO likeDTO) {
+        LikeDTO createdLike = likeService.saveLike(likeDTO);
+        return ResponseEntity.ok(createdLike);
     }
 
-    @PostMapping
-    public ResponseEntity<Like> likePost(@RequestBody Like like) {
-        return new ResponseEntity<>(likeService.saveLike(like), HttpStatus.CREATED);
+    @GetMapping
+    public ResponseEntity<List<LikeDTO>> getAllLikes() {
+        List<LikeDTO> likes = likeService.getAllLikes();
+        return ResponseEntity.ok(likes);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<LikeDTO> getLikeById(@PathVariable Long id) {
+        LikeDTO like = likeService.getLikeById(id);
+        return ResponseEntity.ok(like);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> unlikePost(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteLike(@PathVariable Long id) {
         likeService.deleteLike(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }

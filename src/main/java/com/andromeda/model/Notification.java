@@ -1,22 +1,23 @@
-package com.example.andromeda.model;
+package com.andromeda.entity;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name = "notifications")
 public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String content;
-
-    private Date createdAt;
-
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // Getters and Setters
+    private String message;
+    private boolean read;
+    private Date createdAt;
+
+    // getters and setters
 }

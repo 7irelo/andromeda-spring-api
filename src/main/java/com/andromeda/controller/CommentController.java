@@ -1,9 +1,8 @@
-package com.example.andromeda.controller;
+package com.andromeda.controller;
 
-import com.example.andromeda.model.Comment;
-import com.example.andromeda.service.CommentService;
+import com.andromeda.dto.CommentDTO;
+import com.andromeda.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,20 +15,27 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    @GetMapping("/{postId}")
-    public ResponseEntity<List<Comment>> getPostComments(@PathVariable Long postId) {
-        return new ResponseEntity<>(commentService.getPostComments(postId), HttpStatus.OK);
+    @PostMapping
+    public ResponseEntity<CommentDTO> createComment(@RequestBody CommentDTO commentDTO) {
+        CommentDTO createdComment = commentService.saveComment(commentDTO);
+        return ResponseEntity.ok(createdComment);
     }
 
-    @PostMapping
-    public ResponseEntity<Comment> commentPost(@RequestBody Comment comment) {
-        comment.setCreatedAt(new Date());
-        return new ResponseEntity<>(commentService.saveComment(comment), HttpStatus.CREATED);
+    @GetMapping
+    public ResponseEntity<List<CommentDTO>> getAllComments() {
+        List<CommentDTO> comments = commentService.getAllComments();
+        return ResponseEntity.ok(comments);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CommentDTO> getCommentById(@PathVariable Long id) {
+        CommentDTO comment = commentService.getCommentById(id);
+        return ResponseEntity.ok(comment);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
         commentService.deleteComment(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }
