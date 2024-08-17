@@ -1,6 +1,6 @@
-# Andromeda Spring Framework JDBC API
+# Andromeda Spring Framework API
 
-Welcome to the Andromeda Spring Framework JDBC API project! This project is a backend API for a social media platform called Andromeda, developed using the Spring Framework and PostgreSQL. The API provides CRUD functionality for various entities such as users, posts, comments, likes, friendships, products, and notifications. It uses Spring JDBC for database operations and JWT for authentication.
+Welcome to the Andromeda Spring Framework Neo4j API project! This project is a backend API for a social media platform called Andromeda, developed using the Spring Framework, Neo4j, and Redis. The API provides CRUD functionality for various entities such as users, posts, comments, likes, friendships, products, and notifications. It uses Spring Data Neo4j for database operations and JWT for authentication.
 
 ## Table of Contents
 
@@ -17,7 +17,8 @@ Welcome to the Andromeda Spring Framework JDBC API project! This project is a ba
 
 - User authentication and authorization using JWT
 - CRUD operations for users, posts, comments, likes, friendships, products, and notifications
-- Many-to-many relationships with intermediate tables
+- Relationships managed in Neo4j, leveraging its graph database capabilities
+- Redis integration for caching and session management
 - Notifications for likes and comments
 - RESTful API design
 - Swagger documentation for API endpoints
@@ -27,8 +28,9 @@ Welcome to the Andromeda Spring Framework JDBC API project! This project is a ba
 - Java 22
 - Spring Framework
 - Spring Security
-- Spring JDBC
-- PostgreSQL
+- Spring Data Neo4j
+- Neo4j
+- Redis
 - Swagger
 
 ## Project Structure
@@ -42,6 +44,7 @@ andromeda/
 │   │   │   │   └── andromeda/
 │   │   │   │       ├── config/
 │   │   │   │       │   ├── SecurityConfig.java
+│   │   │   │       │   ├── Neo4jConfig.java
 │   │   │   │       │   └── SwaggerConfig.java
 │   │   │   │       ├── controller/
 │   │   │   │       │   ├── AuthController.java
@@ -90,7 +93,7 @@ andromeda/
 │   │   │   │           └── PasswordUtil.java
 │   │   └── resources/
 │   │       ├── application.properties
-│   │       └── schema.sql
+│   │       └── schema.cypher
 └── pom.xml
 ```
 
@@ -99,7 +102,8 @@ andromeda/
 ### Prerequisites
 
 - Java 22
-- PostgreSQL
+- Neo4j
+- Redis
 - Maven
 
 ### Steps
@@ -111,20 +115,22 @@ andromeda/
    cd andromeda-spring-api
    ```
 
-2. Set up PostgreSQL:
+2. Set up Neo4j and Redis:
 
-   ```bash
-   psql -U postgres -c "CREATE DATABASE andromeda_spring;"
-   psql -U postgres -c "CREATE USER andromeda_user WITH PASSWORD 'password';"
-   psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE andromeda_asp TO andromeda_user;"
-   ```
+   - **Neo4j**: Install and start Neo4j, then create a database named `andromeda_neo4j`.
+   - **Redis**: Install and start Redis.
 
 3. Update `application.properties`:
 
    ```properties
-   spring.datasource.url=jdbc:postgresql://localhost:5432/andromeda_spring
-   spring.datasource.username=postgres
-   spring.datasource.password=password
+   spring.neo4j.uri=bolt://localhost:7687
+   spring.neo4j.authentication.username=neo4j
+   spring.neo4j.authentication.password=your_password
+
+   spring.redis.host=localhost
+   spring.redis.port=6379
+
+   jwt.secret=your_jwt_secret
    ```
 
 4. Run the project:
@@ -161,7 +167,3 @@ Contributions are welcome! Please follow these steps:
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-Feel free to customize the README as per your project's specific details and requirements.
